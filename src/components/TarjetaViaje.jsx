@@ -1,6 +1,16 @@
 import BadgeDescuento from './BadgeDescuento'
 
 function TarjetaViaje({ travel, onSelect }) {
+  const renderAvailableSeats = () => {
+    if (availableSeats === 0) return <span style={{ color: 'red' }}>Agotados</span>
+    if (availableSeats <= 5) return <span style={{ color: 'orange' }}>¡Últimos {availableSeats} asientos!</span>
+    return <span>{availableSeats} asientos disponibles</span>
+  }
+
+  const formatPrice = (price) => {
+    return price.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })
+  }
+
   const {
     origen: origin,
     destino: destination,
@@ -15,13 +25,8 @@ function TarjetaViaje({ travel, onSelect }) {
     { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }
   )
   const hasDiscount = discount > 0
-  const finalPrice = (hasDiscount ? (price - ((price * discount) / 100)) : price).toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })
-
-  const renderAvailableSeats = () => {
-    if (availableSeats === 0) return <span style={{ color: 'red' }}>Agotados</span>
-    if (availableSeats <= 5) return <span style={{ color: 'orange' }}>¡Últimos {availableSeats} asientos!</span>
-    return <span>{availableSeats} asientos disponibles</span>
-  }
+  const priceWithoutDiscount = price - ((price * (discount || 0)) / 100)
+  const isSoldOut = availableSeats === 0
 
   return (
     <div style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
@@ -36,14 +41,14 @@ function TarjetaViaje({ travel, onSelect }) {
         {
           hasDiscount ? (
             <>
-              <p style={{ textDecoration: 'line-through', margin: 0 }}>Precio: {finalPrice} MXN</p>
-              <p style={{ margin: 0 }}>Precio final: {finalPrice} MXN <BadgeDescuento discountPercentage={discount} /></p>
+              <p style={{ textDecoration: 'line-through', margin: 0 }}>Precio: {formatPrice(price)} MXN</p>
+              <p style={{ margin: 0 }}>Precio final: {formatPrice(priceWithoutDiscount)} MXN <BadgeDescuento discountPercentage={discount} /></p>
             </>
           ) : (
-            <p style={{ margin: 0 }}>Precio: {finalPrice} MXN</p>
+            <p style={{ margin: 0 }}>Precio: {formatPrice(price)} MXN</p>
           )
         }
-        <button onClick={() => onSelect(travel)} disabled={availableSeats === 0} style={{ backgroundColor: availableSeats === 0 ? '#ccc' : '#007bff', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: '5px', cursor: availableSeats === 0 ? 'not-allowed' : 'pointer' }}>Elegir</button>
+        <button onClick={() => onSelect(travel)} disabled={isSoldOut} style={{ backgroundColor: isSoldOut ? '#ccc' : '#007bff', color: '#fff', border: 'none', padding: '5px 10px', borderRadius: '5px', cursor: isSoldOut ? 'not-allowed' : 'pointer' }}>Elegir</button>
       </div>
     </div>
   )

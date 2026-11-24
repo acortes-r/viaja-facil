@@ -4,7 +4,7 @@ import TarjetaViaje from './components/TarjetaViaje'
 
 function App() {
   const handleSelect = (travel) => {
-    alert(`Viaje seleccionado: ${travel.origen} &rarr; ${travel.destino}`)
+    alert(`Viaje seleccionado: ${travel.origen} → ${travel.destino}`)
   }
 
   const travelsWithAvailableSeats = viajes.filter(viaje => viaje.asientosDisponibles > 0)
