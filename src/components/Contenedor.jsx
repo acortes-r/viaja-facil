@@ -1,7 +1,7 @@
-function Contenedor({ titulo, children }) {
+function Contenedor({ title, children }) {
   return (
     <section>
-      <h2>{titulo}</h2>
+      <h2>{title}</h2>
       {children}
     </section>
   )

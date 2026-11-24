@@ -1,26 +1,34 @@
 import BadgeDescuento from './BadgeDescuento'
 
-function TarjetaViaje({ viaje }) {
-  console.log(viaje)
-  const { origen, destino, empresa, salida, duracionHoras, descuento, precio } = viaje
-  const fecha = new Date(salida).toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' })
-  const hasDescuento = descuento > 0
-  const finalPrice = hasDescuento ? (precio - ((precio * descuento) / 100)) : precio
+function TarjetaViaje({ travel }) {
+  const { origen: origin, destino: destination, empresa: company, salida: departure, duracionHoras: durationHours, descuento: discount, precio: price } = travel
+  const departureDate = new Date(departure).toLocaleDateString('es-MX',
+    { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }
+  )
+  const hasDiscount = discount > 0
+  const finalPrice = hasDiscount ? (price - ((price * discount) / 100)) : price
 
   return (
-    <article>
-      <header>
-        <h3>Origen: {origen} &rarr; Destino: {destino}</h3>
-        <p style={{ margin: 0 }}>Empresa: {empresa}</p>
-        <p style={{ margin: 0 }}>Fecha y hora de salida: {fecha}</p>
-        <p style={{ margin: 0 }}>Duración: {duracionHoras} horas</p>
-      </header>
-      <main>
-        {!hasDescuento && <p style={{ margin: 0 }}>Precio: ${finalPrice} MXN</p>}
-        {hasDescuento && <p style={{ textDecoration: 'line-through', margin: 0 }}>Precio: ${precio} MXN</p>}
-        {hasDescuento && <p style={{ margin: 0 }}>Precio final: ${finalPrice} MXN {BadgeDescuento({ porcentajeDescuento: descuento })}</p>}
-      </main>
-    </article>
+    <div>
+      <div>
+        <h3 style={{ marginBottom: 0 }}>Origen: {origin} &rarr; Destino: {destination}</h3>
+        <p style={{ margin: 0 }}>Empresa: {company}</p>
+        <p style={{ margin: 0 }}>Fecha y hora de salida: {departureDate}</p>
+        <p style={{ margin: 0 }}>Duración: {durationHours} horas</p>
+      </div>
+      <div>
+        {
+          hasDiscount ? (
+            <>
+              <p style={{ textDecoration: 'line-through', margin: 0 }}>Precio: ${price} MXN</p>
+              <p style={{ margin: 0 }}>Precio final: ${finalPrice} MXN <BadgeDescuento discountPercentage={discount} /></p>
+            </>
+          ) : (
+            <p style={{ margin: 0 }}>Precio: ${price} MXN</p>
+          )
+        }
+      </div>
+    </div>
   )
 }
 

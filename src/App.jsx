@@ -4,9 +4,9 @@ import TarjetaViaje from './components/TarjetaViaje'
 
 function App() {
   return (
-    <Contenedor titulo="Viajes disponibles">
+    <Contenedor title="Viajes disponibles">
       {viajes.filter(viaje => viaje.asientosDisponibles > 0)
-        .map(viaje => <TarjetaViaje key={viaje.id} viaje={viaje} />)}
+        .map(travel => <TarjetaViaje key={travel.id} travel={travel} />)}
     </Contenedor>
   )
 }
